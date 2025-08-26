@@ -32,3 +32,22 @@ google-services.json
 
 # Android Profiling
 *.hprof
+
+# Gradle Wrapper
+gradle-wrapper.jar
+gradle-wrapper.properties
+
+# Android Studio specific files
+*.hprof
+*.DS_Store
+
+# Generated files
+*.class
+*.dex
+*.apk
+*.ap_
+*.so
+*.log
+
+# ProGuard
+proguard/
