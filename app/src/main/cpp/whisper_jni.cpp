@@ -33,7 +33,7 @@ static int cpu_threads_default() {
 // ------------------------------------------------------------
 // jlong init(String modelPath)
 extern "C" JNIEXPORT jlong JNICALL
-Java_com_example_whisper_sync_NativeWhisper_init(JNIEnv* env, jclass, jstring jpath) {
+Java_com_example_whisper_1sync_NativeWhisper_init(JNIEnv* env, jclass, jstring jpath) {
     const char* cpath = env->GetStringUTFChars(jpath, nullptr);
     LOGI("init: path=%s", cpath ? cpath : "(null)");
 
@@ -55,7 +55,7 @@ Java_com_example_whisper_sync_NativeWhisper_init(JNIEnv* env, jclass, jstring jp
 // ------------------------------------------------------------
 // String fullTranscribe(long ctx, float[] pcm, int sampleRate)
 extern "C" JNIEXPORT jstring JNICALL
-Java_com_example_whisper_sync_NativeWhisper_fullTranscribe(
+Java_com_example_whisper_1sync_NativeWhisper_fullTranscribe(
         JNIEnv* env, jclass,
         jlong jctx, jfloatArray jpcm, jint sample_rate) {
 
@@ -131,7 +131,7 @@ Java_com_example_whisper_sync_NativeWhisper_fullTranscribe(
 // ------------------------------------------------------------
 // void free(long ctx)
 extern "C" JNIEXPORT void JNICALL
-Java_com_example_whisper_sync_NativeWhisper_free(JNIEnv*, jclass, jlong jctx) {
+Java_com_example_whisper_1sync_NativeWhisper_free(JNIEnv*, jclass, jlong jctx) {
     auto* ctx = reinterpret_cast<whisper_context*>(jctx);
     if (ctx) {
         whisper_free(ctx);

@@ -10,12 +10,33 @@ android {
 
     defaultConfig {
         applicationId = "com.example.whisper_sync"
-        minSdk = 31
+        minSdk = 33
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        // Nur ARM64 bauen (weit verbreitet, kleinere APK)
+        ndk {
+            abiFilters.add("arm64-v8a")
+            // optional zusätzlich:
+            // abiFilters.add("armeabi-v7a")
+        }
+
+        // Flags an CMake (in KTS sind das Listen -> addAll)
+        externalNativeBuild {
+            cmake {
+                cFlags.addAll(listOf(
+                    "-O3", "-DNDEBUG",
+                    "-fno-finite-math-only"
+                ))
+                cppFlags.addAll(listOf(
+                    "-std=c++17", "-O3", "-DNDEBUG",
+                    "-fno-finite-math-only"
+                ))
+            }
+        }
     }
 
     buildTypes {
@@ -25,8 +46,16 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            // Optional: Native Debug-Symbole
+            // ndk { debugSymbolLevel = "FULL" }
+        }
+        debug {
+            // Optional: auch im Debug Native-Symbole
+            // ndk { debugSymbolLevel = "FULL" }
         }
     }
+
+    // Java/Kotlin
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
@@ -34,21 +63,39 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
+
     buildFeatures {
         compose = true
+        prefab = false
+    }
+
+    // CMake einbinden – Pfad zu deiner CMakeLists.txt
+    externalNativeBuild {
+        cmake {
+            path = file("src/main/cpp/CMakeLists.txt")
+            // version = "3.22.1" // optional fixieren
+        }
+    }
+
+    // (empfohlen) Legacy-Packaging für JNI
+    packaging {
+        jniLibs {
+            useLegacyPackaging = true
+        }
     }
 }
 
 dependencies {
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
+
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
