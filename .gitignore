@@ -53,3 +53,4 @@ gradle-wrapper.properties
 proguard/
 
 app/src/main/assets/models/*
+!app/src/main/assets/models/.gitkeep
